@@ -14,21 +14,16 @@ const TodoPage = () => {
     const [todo, setTodo] = useState([]);
     const [editTodo, setEditTodo] = useState({ title: "", completed: false });
     console.log(Array.isArray(todo))
-    console.log(todo);
+    console.log('todo', todo);
 
     const [newTodo, setNewTodo] = useState('');
 
     const fetchTodos = async () => {
         const response = await fetch('/api/todos')
 
-        if (response.status === 401) {
+        if (response.status === 400) {
             router.push('/login')
             return toast.error('User not logged in')
-        }
-
-        if (!response.ok) {
-            console.log('Failed to fetch todos')
-            return;
         }
 
         console.log('response', response)
