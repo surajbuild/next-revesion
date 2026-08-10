@@ -2,6 +2,7 @@ import { CreateLoginSchema } from "@/app/types";
 import { connectDB } from "@/lib/connectDB";
 import User from "@/models/userModel";
 import bcrypt from "bcryptjs";
+import { createHmac } from "crypto";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -41,9 +42,18 @@ export async function POST(request: NextRequest) {
     }, {status: 401})
   }
 
+  const signature = createHmac('sha256',process.env.COOKIE_SECRET!)
+                    .update(user.id)
+                    .digest('hex')
+  console.log('signature', signature)
+
+
+  const signedUserId = `${user.id}.${signature}`;
+
+
   const cookieStore = await cookies();
 
-  cookieStore.set('userId', user._id, {
+  cookieStore.set('userId', signedUserId, {
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000
   })
