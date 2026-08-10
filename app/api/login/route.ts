@@ -1,4 +1,5 @@
 import { CreateLoginSchema } from "@/app/types";
+import { signCookie } from "@/lib/auth";
 import { connectDB } from "@/lib/connectDB";
 import User from "@/models/userModel";
 import bcrypt from "bcryptjs";
@@ -42,15 +43,7 @@ export async function POST(request: NextRequest) {
     }, {status: 401})
   }
 
-  const signature = createHmac('sha256',process.env.COOKIE_SECRET!)
-                    .update(user.id)
-                    .digest('hex')
-  console.log('signature', signature)
-
-
-  const signedUserId = `${user.id}.${signature}`;
-
-
+  const signedUserId = signCookie(user.id)
   const cookieStore = await cookies();
 
   cookieStore.set('userId', signedUserId, {
