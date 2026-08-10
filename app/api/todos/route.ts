@@ -9,13 +9,13 @@ import { isLoggedIn } from "@/lib/auth";
 export async function GET(request: Request) {
   await connectDB();
   const user = await isLoggedIn();
-  console.log('user', user)
+  console.log("user", user);
 
-  if(user instanceof Response) {
+  if (user instanceof Response) {
     return user;
   }
 
-  const allTodos = await Todo.find({userId: user._id});
+  const allTodos = await Todo.find({ userId: user._id });
   console.log("allTodos", allTodos);
 
   console.log("--------------------------------------");
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
   await connectDB();
 
   const user = await isLoggedIn();
-  if(user instanceof Response) {
+  if (user instanceof Response) {
     return user;
   }
 
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
   });
 
   return Response.json(
-    { id, title, completed},
+    { id, title, completed },
     {
       status: 201,
     },
