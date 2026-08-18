@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
@@ -10,9 +10,15 @@ export default function Page() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [user, setUser] = useState('');
 
     const router = useRouter();
     const pathname = usePathname();
+
+    useEffect(() => {
+        fetchUser();
+    }, [])
 
     const handleRegister = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -33,11 +39,33 @@ export default function Page() {
         router.push('/login')
     }
 
+    async function fetchUser() {
+        console.log('inside fetch user')
+        const response = await fetch('/api/user')
+        const data = await response.json();
+        console.log('data', data)
+        if(!response.ok) {
+            return router.push('/login')
+        }
+        if(!data.error) {
+            setUser(data.user)
+        }
+
+    }
+
     return (
 
 
         <form onSubmit={handleRegister} className="max-w-md mx-auto p-6 bg-base-100 rounded-xl shadow-lg space-y-4">
-            <h2 className="text-2xl font-bold text-center">Sign Up</h2>
+            <div className='flex justify-between'>
+                <h2 className="text-2xl font-bold text-center">Sign Up</h2>
+                <div className='text-3xl cursor-pointer' onClick={() => (
+                    isModalOpen ? setIsModalOpen(false) : setIsModalOpen(true)
+                )}>🗿</div>
+                <div className='flex flex-col gap-3'>
+                    {isModalOpen ? (<div>{user.name} {user.email}  <div onClick={() => router.push('/logout')} className='cursor-pointer'>LOGOUT</div></div>) : <div></div>}
+                </div>
+            </div>
 
             {/* Name */}
             <div>
