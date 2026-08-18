@@ -53,6 +53,20 @@ export default function Page() {
 
     }
 
+    async function handleLogout() {
+        console.log('inside handle logout')
+        const response = await fetch('/api/logout', {
+            method: "POST",
+        })
+        const data = await response.json();
+        console.log('data', data);
+
+        if(response.ok){
+            toast.success('Logout successfully')
+            router.push('/login')
+        } 
+    }
+
     return (
 
 
@@ -63,7 +77,7 @@ export default function Page() {
                     isModalOpen ? setIsModalOpen(false) : setIsModalOpen(true)
                 )}>🗿</div>
                 <div className='flex flex-col gap-3'>
-                    {isModalOpen ? (<div>{user.name} {user.email}  <div onClick={() => router.push('/logout')} className='cursor-pointer'>LOGOUT</div></div>) : <div></div>}
+                    {isModalOpen ? (<div>{user.name} {user.email}  <div onClick={() => handleLogout()} className='cursor-pointer'>LOGOUT</div></div>) : <div></div>}
                 </div>
             </div>
 
