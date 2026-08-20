@@ -60,6 +60,9 @@ const page = () => {
                 <button type="submit" className="btn btn-primary w-full">
                     Login
                 </button>
+                <div className="flex justify-center gap-1.5">
+                    Don't have an account<a href="/" className="text-blue-600 underline">sign up</a>
+                </div>
             </Form>
         </div>
     )

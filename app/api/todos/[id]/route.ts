@@ -1,14 +1,8 @@
-import todos from "@/todos.json";
-import { error } from "console";
-import { randomUUID } from "crypto";
-import { writeFile } from "fs/promises";
-import { json } from "stream/consumers";
 import { connectDB } from "@/lib/connectDB";
 import Todo from "@/models/todoModel";
-import { cookies } from "next/headers";
 import { isLoggedIn } from "@/lib/auth";
 
-export async function GET(request: Request, { params }) {
+export async function GET(request: Request, { params }: {params: Promise<{id: string}>}) {
   await connectDB();
   const { id } = await params;
   console.log('id', id);
@@ -34,7 +28,10 @@ export async function GET(request: Request, { params }) {
 }
 
 
-export async function PUT(request: Request, { params }) {
+export async function PUT(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   await connectDB();
 
   const user = await isLoggedIn();
@@ -53,7 +50,10 @@ export async function PUT(request: Request, { params }) {
   return Response.json(updatedTodo);
 }
 
-export async function DELETE(request: Request, { params }) {
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   console.log("Delete called");
   console.log("request", await params);
   await connectDB();

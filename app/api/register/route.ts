@@ -22,7 +22,9 @@ export async function POST(request: NextRequest) {
 
     const { name, email, password } = data;
 
-    const existingUser = await User.findOne({ email: data.email });
+    console.log('data', data)
+
+    const existingUser = await User.findOne({ email: data.email }).select('-password');
 
     if (existingUser) {
       return NextResponse.json(

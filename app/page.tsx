@@ -22,7 +22,7 @@ export default function Page() {
 
     const handleRegister = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("Registering: ", { name, email, password })
+        console.log("Registering: ", { name, email })
 
         const response = await fetch('/api/register', {
             credentials: 'include', // for other site like when frontend is on 3000 and backend is on 4000

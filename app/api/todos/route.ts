@@ -1,9 +1,6 @@
-import todos from "@/todos.json";
 import { connectDB } from "@/lib/connectDB";
-import { cookies } from "next/headers";
 
 import Todo from "@/models/todoModel";
-import toast from "react-hot-toast";
 import { isLoggedIn } from "@/lib/auth";
 
 export async function GET(request: Request) {
