@@ -6,12 +6,17 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 
 
+type UserProfile = {
+    name: string;
+    email: string;
+};
+
 export default function Page() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [user, setUser] = useState('');
+    const [user, setUser] = useState<UserProfile | null>(null);
 
     const router = useRouter();
     const pathname = usePathname();
@@ -42,12 +47,12 @@ export default function Page() {
     async function fetchUser() {
         console.log('inside fetch user')
         const response = await fetch('/api/user')
-        const data = await response.json();
+        const data: { error?: string; user?: UserProfile } = await response.json();
         console.log('data', data)
         if(!response.ok) {
             return router.push('/login')
         }
-        if(!data.error) {
+        if(!data.error && data.user) {
             setUser(data.user)
         }
 
@@ -77,7 +82,7 @@ export default function Page() {
                     isModalOpen ? setIsModalOpen(false) : setIsModalOpen(true)
                 )}>🗿</div>
                 <div className='flex flex-col gap-3'>
-                    {isModalOpen ? (<div>{user.name} {user.email}  <div onClick={() => handleLogout()} className='cursor-pointer'>LOGOUT</div></div>) : <div></div>}
+                    {isModalOpen && user ? (<div>{user.name} {user.email}  <div onClick={() => handleLogout()} className='cursor-pointer'>LOGOUT</div></div>) : <div></div>}
                 </div>
             </div>
 

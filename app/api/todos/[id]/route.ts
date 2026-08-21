@@ -44,8 +44,15 @@ export async function PUT(
 
   const { id } = await params;
 
-  const updatedTodo = await Todo.updateMany({_id: id, userId: user.id},
-    body, { new: true }); 
+  const updatedTodo = await Todo.findOneAndUpdate(
+    { _id: id, userId: user.id },
+    body,
+    { new: true, runValidators: true },
+  );
+
+  if (!updatedTodo) {
+    return Response.json({ error: "todo not found" }, { status: 404 });
+  }
 
   return Response.json(updatedTodo);
 }
