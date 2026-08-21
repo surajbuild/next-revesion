@@ -11,14 +11,16 @@ export async function GET() {
     console.log("user", user.email.length);
 
     if (user instanceof Response) {
-      return Response.json({
-        message: "user fetched",
-        user,
-      });
+      return user;
     }
+
+    return Response.json({
+      message: "user fetched",
+      user,
+    });
   } catch (error) {
     return Response.json({
-        message: "Something went wrong"
-    })
+      message: "Something went wrong",
+    });
   }
 }
