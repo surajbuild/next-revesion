@@ -8,10 +8,16 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 
+type TodoItem = {
+    id: string;
+    title: string;
+    completed: boolean;
+};
+
 const TodoPage = () => {
     const router = useRouter();
 
-    const [todo, setTodo] = useState([]);
+    const [todo, setTodo] = useState<TodoItem[]>([]);
     const [editTodo, setEditTodo] = useState({ title: "", completed: false });
     console.log(Array.isArray(todo))
     console.log('todo', todo);
@@ -37,7 +43,7 @@ const TodoPage = () => {
         fetchTodos();
     }, [])
 
-    const addTodo = async (title) => {
+    const addTodo = async (title: string) => {
         console.log('title', title)
         const response = await fetch('/api/todos', {
             method: "POST",
@@ -59,7 +65,7 @@ const TodoPage = () => {
 
 
 
-    const deleteTodo = async (id) => {
+    const deleteTodo = async (id: string) => {
         const response = await fetch(`/api/todos/${id}`, {
             method: "DELETE",
             headers: {
@@ -71,7 +77,7 @@ const TodoPage = () => {
         fetchTodos();
     }
 
-    const updateTodo = async (id) => {
+    const updateTodo = async (id: string) => {
         console.log("UPDATE CALLED")
         const response = await fetch(`/api/todos/${id}`, {
             method: "PUT",

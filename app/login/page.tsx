@@ -11,7 +11,7 @@ const page = () => {
 
     const router = useRouter();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log('LOGGING... ', { email, password });
 
