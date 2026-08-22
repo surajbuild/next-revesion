@@ -1,9 +1,10 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import { ArrowRight, Check, LockKeyhole, Sparkles, UserRound } from 'lucide-react';
 
 
 type UserProfile = {
@@ -19,8 +20,6 @@ export default function Page() {
     const [user, setUser] = useState<UserProfile | null>(null);
 
     const router = useRouter();
-    const pathname = usePathname();
-
     useEffect(() => {
         fetchUser();
     }, [])
@@ -73,68 +72,48 @@ export default function Page() {
     }
 
     return (
+        <main className="home-shell">
+            <section className="home-intro">
+                <div className="eyebrow"><Sparkles size={15} /> A calmer way to get things done</div>
+                <h1>Make room for the work that <em>matters.</em></h1>
+                <p className="home-lede">A focused space for your everyday tasks, ideas, and next small wins. Start simple, stay in rhythm.</p>
+                <ul className="benefit-list">
+                    <li><span><Check size={15} /></span> Capture tasks in seconds</li>
+                    <li><span><Check size={15} /></span> Keep your day beautifully clear</li>
+                    <li><span><Check size={15} /></span> Pick up exactly where you left off</li>
+                </ul>
+                <div className="quiet-note"><LockKeyhole size={16} /> Your personal space stays yours.</div>
+            </section>
 
-
-        <form onSubmit={handleRegister} className="max-w-md mx-auto p-6 bg-base-100 rounded-xl shadow-lg space-y-4">
-            <div className='flex justify-between'>
-                <h2 className="text-2xl font-bold text-center">Sign Up</h2>
-                <div className='text-3xl cursor-pointer' onClick={() => (
-                    isModalOpen ? setIsModalOpen(false) : setIsModalOpen(true)
-                )}>🗿</div>
-                <div className='flex flex-col gap-3'>
-                    {isModalOpen && user ? (<div>{user.name} {user.email}  <div onClick={() => handleLogout()} className='cursor-pointer'>LOGOUT</div></div>) : <div></div>}
+            <section className="signup-panel" aria-labelledby="signup-title">
+                <div className="profile-menu">
+                    <button type="button" className="profile-button" aria-label="Open profile menu" onClick={() => setIsModalOpen(!isModalOpen)}>
+                        <UserRound size={18} />
+                    </button>
+                    {isModalOpen && user && (
+                        <div className="profile-popover">
+                            <strong>{user.name}</strong>
+                            <span>{user.email}</span>
+                            <button type="button" onClick={handleLogout}>Log out</button>
+                        </div>
+                    )}
                 </div>
-            </div>
-
-            {/* Name */}
-            <div>
-                <label className="label">
-                    <span className="label-text">Name</span>
-                </label>
-                <input
-                    type="text"
-                    placeholder="Enter your name"
-                    className="input input-bordered w-full"
-                    required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
-            </div>
-
-            {/* Email */}
-            <div>
-                <label className="label">
-                    <span className="label-text">Email</span>
-                </label>
-                <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="input input-bordered w-full"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-            </div>
-
-            {/* Password */}
-            <div>
-                <label className="label">
-                    <span className="label-text">Password</span>
-                </label>
-                <input
-                    type="password"
-                    placeholder="Enter your password"
-                    className="input input-bordered w-full"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-            </div>
-
-            <button type="submit" className="btn btn-primary w-full">
-                Sign Up
-            </button>
-            <p className='text-sm'>Already have an account? <Link href='/login' className={pathname === '/login' ? 'btn btn-primary' : 'text-blue-500 glass'}>Login</Link></p>
-        </form>
+                <div className="form-heading">
+                    <p className="form-kicker">Get started</p>
+                    <h2 id="signup-title">Create your space</h2>
+                    <p>Join in less than a minute. No noise, just momentum.</p>
+                </div>
+                <form onSubmit={handleRegister} className="signup-form">
+                    <label htmlFor="name">Your name</label>
+                    <input id="name" type="text" placeholder="e.g. Alex Morgan" required value={name} onChange={(e) => setName(e.target.value)} />
+                    <label htmlFor="email">Email address</label>
+                    <input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                    <label htmlFor="password">Create a password</label>
+                    <input id="password" type="password" placeholder="At least 8 characters" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                    <button type="submit" className="signup-button">Create account <ArrowRight size={18} /></button>
+                </form>
+                <p className="login-prompt">Already have an account? <Link href="/login">Log in <ArrowRight size={14} /></Link></p>
+            </section>
+        </main>
     )
 }
